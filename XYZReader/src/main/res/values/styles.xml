@@ -25,4 +25,28 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <!-- Article item title -->
+    <style name="Theme.Bacon.Title" parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/main_text_color</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:ellipsize">end</item><!-- ends with ... at the end -->
+    </style>
+
+    <!-- Article item subtitle -->
+    <style name="Theme.Bacon.Subtitle" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item><!-- ends with ... at the end -->
+    </style>
+
+    <!-- Article content text -->
+    <style name="Theme.Bacon.ArticleText" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:textColorLink">@color/theme_accent</item>
+        <item name="android:textSize">@dimen/detail_body_text_size</item>
+        <item name="android:lineSpacingMultiplier">@fraction/detail_body_line_spacing_multiplier
+        </item>
+    </style>
+
 </resources>
