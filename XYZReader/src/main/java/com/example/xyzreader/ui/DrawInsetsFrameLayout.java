@@ -16,6 +16,7 @@
 
 package com.example.xyzreader.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -31,9 +32,9 @@ import com.example.xyzreader.R;
 
 public class DrawInsetsFrameLayout extends FrameLayout {
     private Drawable mInsetBackground;
-    private Drawable mTopInsetBackground;
-    private Drawable mBottomInsetBackground;
-    private Drawable mSideInsetBackground;
+//    private Drawable mTopInsetBackground;
+//    private Drawable mBottomInsetBackground;
+//    private Drawable mSideInsetBackground;
 
     private Rect mInsets;
     private Rect mTempRect = new Rect();
@@ -100,6 +101,7 @@ public class DrawInsetsFrameLayout extends FrameLayout {
         mOnInsetsCallback = onInsetsCallback;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     @Override
     public WindowInsets onApplyWindowInsets(WindowInsets insets) {
         insets = super.onApplyWindowInsets(insets);
