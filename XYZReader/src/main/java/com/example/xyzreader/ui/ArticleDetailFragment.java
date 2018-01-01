@@ -54,6 +54,12 @@ public class ArticleDetailFragment extends Fragment implements
     public static final String ARG_ITEM_ID = "item_id";
     private static final String TAG = "ArticleDetailFragment";
     private static final float PARALLAX_FACTOR = 1.25f;
+    static RequestOptions requestOptions = new RequestOptions();
+
+    static {
+        requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
+        requestOptions.override(600, 450);
+    }
 
     private Cursor mCursor;
     private long mItemId;
@@ -62,14 +68,12 @@ public class ArticleDetailFragment extends Fragment implements
     private ObservableScrollView mScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
-
     private int mTopInset;
     private View mPhotoContainerView;
     private ImageView mPhotoView;
     private int mScrollY;
     private boolean mIsCard = false;
     private int mStatusBarFullOpacityBottom;
-
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
@@ -242,9 +246,6 @@ public class ArticleDetailFragment extends Fragment implements
 
             }
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
-            RequestOptions requestOptions = new RequestOptions();
-            requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
-            requestOptions.override(300, 200);
             Glide.with(this).load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
                     .apply(requestOptions)
                     .listener(new RequestListener<Drawable>() {
