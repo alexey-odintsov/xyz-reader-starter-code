@@ -34,13 +34,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 
@@ -54,12 +47,6 @@ public class ArticleDetailFragment extends Fragment implements
     public static final String ARG_ITEM_ID = "item_id";
     private static final String TAG = "ArticleDetailFragment";
     private static final float PARALLAX_FACTOR = 1.25f;
-    static RequestOptions requestOptions = new RequestOptions();
-
-    static {
-        requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
-        requestOptions.override(600, 450);
-    }
 
     private Cursor mCursor;
     private long mItemId;
@@ -246,26 +233,27 @@ public class ArticleDetailFragment extends Fragment implements
 
             }
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
-            Glide.with(this).load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
-                    .apply(requestOptions)
-                    .listener(new RequestListener<Drawable>() {
+            ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
+                    .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
+
                         @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
+                        public void onErrorResponse(VolleyError volleyError) {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            Bitmap bitmap = ((BitmapDrawable) resource).getBitmap();
+                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+                            Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
                                 Palette p = (new Palette.Builder(bitmap)).generate();
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
-                                mRootView.findViewById(R.id.meta_bar).setBackgroundColor(mMutedColor);
+                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
+                                mRootView.findViewById(R.id.meta_bar)
+                                        .setBackgroundColor(mMutedColor);
                                 updateStatusBar();
                             }
-                            return false;
                         }
-                    }).into(mPhotoView);
+                    });
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
